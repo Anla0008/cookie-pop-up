@@ -1,6 +1,5 @@
-import Image from "next/image";
 import Likebutton from "@/components/Likebutton";
-import CookieConsent from "@/components/cookie";
+import CookieConsent from "@/components/Cookie";
 
 export default function Home() {
   return (

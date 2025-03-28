@@ -1,35 +1,46 @@
-"use client"; // Sikrer, at komponenten kun kører på klienten (Next.js-specifikt)
+"use client";
 
 import { useState, useEffect } from "react";
+import { RxCross2 } from "react-icons/rx";
+import { BiSolidCookie } from "react-icons/bi";
 
-const CookieConsent = (props) => {
-  // "State" til at styre, om cookie-popuppen skal vises
+const CookiePopup = () => {
+  // State til at styre, om popuppen skal vises
   const [showPopup, setShowPopup] = useState(false);
 
-  // useEffect kører én gang ved første render og tjekker localStorage
   useEffect(() => {
-    const consent = localStorage.getItem("cookieConsent"); // Henter gemt cookie-valg
+    // Tjekker om brugeren allerede har accepteret cookies
+    const consent = localStorage.getItem("cookieConsent");
     if (!consent) {
-      setShowPopup(true); // Viser popuppen, hvis brugeren ikke har accepteret endnu
+      setShowPopup(true); // Viser popuppen, hvis der ikke er givet samtykke
     }
-  }, []);
+  }, []); // Kører kun ved første render
 
-  // Funktion der håndterer accept af cookies
+  // Funktion til at acceptere cookies
   const handleAccept = () => {
-    localStorage.setItem("cookieConsent", "true"); // Gemmer accept i localStorage
+    localStorage.setItem("cookieConsent", "true"); // Gemmer samtykke i localStorage
     setShowPopup(false); // Skjuler popuppen
   };
 
   return (
-    showPopup && ( // Kun vis popuppen, hvis showPopup er true
-      <div className="cookie-consent">
-        <p>{props.message || "Vi bruger cookies for at forbedre din oplevelse."}</p>
-        <button onClick={handleAccept} className="cookie-consent-button">
-          {props.buttonText || "Accepter"}
+    /*"&&" hvis ALT ovenfor er true*/
+    showPopup && (
+      <article className="cookiePopup">
+        <div className="icons">
+          {/* Cookie ikon */}
+          <BiSolidCookie className="cookie" />
+          {/* Lukkeikon med onClick-handler til at skjule popuppen */}
+          <RxCross2 className="cross" onClick={() => setShowPopup(false)} />
+        </div>
+        {/* Tekstbesked */}
+        <p className="paragraph">We use cookies to improve your user experience</p>
+        {/* Knap til at acceptere cookies */}
+        <button className="button" onClick={handleAccept}>
+          I like Cookies
         </button>
-      </div>
+      </article>
     )
   );
 };
 
-export default CookieConsent; // Eksporterer komponenten til brug i andre filer
+export default CookiePopup;
